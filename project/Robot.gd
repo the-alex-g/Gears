@@ -30,5 +30,6 @@ func _physics_process(_delta:float)->void:
 func hit(damage_dealt:int)->void:
 	_health -= damage_dealt
 	if _health <= 0:
+		_health = 0
 		queue_free()
 	print("ouch")
