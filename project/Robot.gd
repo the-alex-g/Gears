@@ -26,3 +26,10 @@ func _physics_process(_delta:float)->void:
 			_current_vertical_speed = 0
 		if _current_vertical_speed < _max_fall_speed:
 			_current_vertical_speed += GRAVITY
+
+
+func hit(damage:int)->void:
+	health -= damage
+	if health <= 0:
+		queue_free()
+	print("ouch")

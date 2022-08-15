@@ -3,6 +3,7 @@ extends Node
 
 var equipped := false
 var upgrades := 1
+var strength := 0 setget , get_strength
 
 func _init(starting_equip:bool, starting_upgrades:int)->void:
 	equipped = starting_equip
@@ -14,5 +15,5 @@ func upgrade()->void:
 		upgrades += 1
 
 
-func strength()->int:
+func get_strength()->int:
 	return upgrades + 1
