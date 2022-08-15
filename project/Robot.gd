@@ -3,9 +3,8 @@ extends KinematicBody2D
 
 const GRAVITY := 20
 
-export var power_crystals := 1
-export var health := 6
-
+var _power_crystals := 1
+var _health := 6
 var _sword := System.new(false, 0)
 var _shield := System.new(false, 0)
 var _ranged := System.new(false, 0)
@@ -28,8 +27,8 @@ func _physics_process(_delta:float)->void:
 			_current_vertical_speed += GRAVITY
 
 
-func hit(damage:int)->void:
-	health -= damage
-	if health <= 0:
+func hit(damage_dealt:int)->void:
+	_health -= damage_dealt
+	if _health <= 0:
 		queue_free()
 	print("ouch")

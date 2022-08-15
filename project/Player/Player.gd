@@ -1,6 +1,9 @@
 extends Robot
 
+signal update_hud(parameter_name, new_value, new_max)
+
 var _jump_speed := 475
+var _scrap := 0
 
 onready var _melee_hit_area := $"%AttackArea"
 
@@ -40,5 +43,15 @@ func _ranged_attack()->void:
 	pass
 
 
+func hit(damage_dealt:int)->void:
+	.hit(damage_dealt)
+	emit_signal("update_hud", "health", _health, false)
+
 func _draw():
 	draw_circle(Vector2.ONE * 16, 16, Color.red)
+
+
+# do starting configuration of HUD here
+func _on_Main_ready()->void:
+	emit_signal("update_hud", "health", _health, true)
+	emit_signal("update_hud", "scrap", _scrap, false)
