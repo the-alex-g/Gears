@@ -1,31 +1,51 @@
 extends Robot
 
+enum PreferredWeapon {RANGED, SWORD, NONE}
+
 var _upgrades := 0
-var _move_direction := -1
 var _speed := 100
+var _target : KinematicBody2D
+var _is_target_in_range := false
+var _preferred_weapon : int
 
 onready var _turn_detector = $"%TurnDetector" as RayCast2D
-onready var _sprite = $Sprite as Sprite
+
+
+func _ready():
+	generate()
 
 
 func _physics_process(_delta:float)->void:
 	# get left/right movement
-	var horizontal = _move_direction * _speed
+	var horizontal = _direction * _speed
+	
+	# back off slowly if you're ranged and have a target and your target is not nearby
+	if _target != null and _preferred_weapon == PreferredWeapon.RANGED and not _is_target_in_range:
+		horizontal /= 2
 	
 	# move
-	var direction = Vector2(horizontal, _current_vertical_speed)
+	var movement = Vector2(horizontal, _current_vertical_speed)
 	# warning-ignore:return_value_discarded
-	move_and_slide(direction, Vector2.UP)
+	move_and_slide(movement, Vector2.UP)
 	
 	# change direction if necessary
-	if is_on_wall() or not _turn_detector.is_colliding():
-		_move_direction *= -1
+	if (is_on_wall() and _target == null) or not _turn_detector.is_colliding():
+		_direction *= -1
 	
-	# flip sprite to match movement direction
-	if _move_direction < 0:
-		_sprite.scale.x = -1
-	else:
-		_sprite.scale.x = 1
+	# AI function
+	if _target != null:
+		# move towards opponent if you like swords
+		if _preferred_weapon == PreferredWeapon.SWORD:
+			_direction = sign(_target.global_position.x - global_position.x)
+		# run away if you don't have a weapon, or if you like ranged
+		elif _preferred_weapon == PreferredWeapon.NONE or _preferred_weapon == PreferredWeapon.RANGED:
+			_direction = sign(global_position.x - _target.global_position.x)
+		
+		# attack
+		if _sword.equipped and _is_target_in_range and _can_attack_melee:
+			_melee_attack()
+		if _ranged.equipped and not _is_target_in_range and _can_attack_ranged:
+			_ranged_attack()
 
 
 func generate(level := 1)->void:
@@ -35,12 +55,12 @@ func generate(level := 1)->void:
 	_health = (randi() % _upgrades) + 1
 	
 	# equip one offensive system
-	match randi() % 3:
-		0:
+	match randi() % 5:
+		0, 1:
 			_sword.equipped = true
-		1:
+		2, 3:
 			_ranged.equipped = true
-		2:
+		4:
 			_drones.equipped = true
 	
 	# equip/upgrade extra systems
@@ -60,11 +80,17 @@ func generate(level := 1)->void:
 				_speed += 50
 	
 	# randomize starting direction
-	match randi() % 2:
-		0:
-			_move_direction = -1
-		1:
-			_move_direction = 1
+	_direction = -1 if randi() % 2 == 0 else 1
+	
+	# set preferred weapon
+	if _ranged.equipped and not _sword.equipped:
+		_preferred_weapon = PreferredWeapon.RANGED
+	elif _sword.equipped and not _ranged.equipped:
+		_preferred_weapon = PreferredWeapon.SWORD
+	elif _ranged.get_strength(WeaponPaths.DAMAGE) > _sword.get_strength(WeaponPaths.DAMAGE):
+		_preferred_weapon = PreferredWeapon.RANGED
+	else:
+		_preferred_weapon = PreferredWeapon.NONE
 
 
 func _upgrade_system(system:System)->System:
@@ -77,3 +103,22 @@ func _upgrade_system(system:System)->System:
 
 func _draw()->void:
 	draw_circle(Vector2.ONE * 16, 16, Color.greenyellow)
+
+
+func _on_PlayerDetectionArea_body_entered(body:PhysicsBody2D)->void:
+	_target = body
+
+
+func _on_PlayerDetectionArea_body_exited(_body:PhysicsBody2D)->void:
+	_target = null
+	# turn around if you like ranged!
+	if _preferred_weapon == PreferredWeapon.RANGED:
+		_direction *= -1
+
+
+func _on_AttackArea_body_entered(_body:PhysicsBody2D)->void:
+	_is_target_in_range = true
+
+
+func _on_AttackArea_body_exited(_body:PhysicsBody2D)->void:
+	_is_target_in_range = false

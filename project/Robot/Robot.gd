@@ -25,16 +25,24 @@ onready var _firing_point = $"%FiringPoint" as Position2D
 onready var _melee_cooldown_timer = $"%MeleeCooldownTimer" as Timer
 onready var _ranged_cooldown_timer = $"%RangedCooldownTimer" as Timer
 onready var _melee_hit_area = $"%AttackArea" as Area2D
+onready var _sprite = $"%Sprite" as Sprite
+onready var _cooldown_bonus := 0.0 if is_player else 0.5
+
+
+func _process(_delta:float)->void:
+	# flip sprite to match movement direction
+	if _direction < 0:
+		_sprite.scale.x = -1
+	else:
+		_sprite.scale.x = 1
 
 
 func _melee_attack()->void:
-	print("attack ", _sword.get_strength(WeaponPaths.DAMAGE))
 	for body in _melee_hit_area.get_overlapping_bodies():
 		if body.has_method("hit"):
 			body.hit(_sword.get_strength(WeaponPaths.DAMAGE))
 	_can_attack_melee = false
-	print(MELEE_COOLDOWN_TIME - _sword.get_strength(WeaponPaths.COOLDOWN) * COOLDOWN_STEP)
-	_melee_cooldown_timer.start(MELEE_COOLDOWN_TIME - _sword.get_strength(WeaponPaths.COOLDOWN) * COOLDOWN_STEP)
+	_melee_cooldown_timer.start(MELEE_COOLDOWN_TIME - _sword.get_strength(WeaponPaths.COOLDOWN) * COOLDOWN_STEP + _cooldown_bonus)
 	yield(_melee_cooldown_timer, "timeout")
 	_can_attack_melee = true
 

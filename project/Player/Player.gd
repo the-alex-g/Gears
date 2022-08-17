@@ -47,7 +47,9 @@ func _draw():
 	draw_circle(Vector2.ONE * 16, 16, Color.red)
 
 
-# do starting configuration of HUD here
+# do starting configuration of HUD here,
+# because the player is not ready at the
+# same time the HUD is.
 func _on_Main_ready()->void:
 	emit_signal("update_hud", "health", STARTING_HEALTH, true)
 	emit_signal("update_hud", "scrap", _scrap, false)
