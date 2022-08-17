@@ -10,16 +10,22 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "KinematicBody2D",
+"class": "FallingObject",
+"language": "GDScript",
+"path": "res://Robot/FallingObject.gd"
+}, {
+"base": "FallingObject",
 "class": "Robot",
 "language": "GDScript",
-"path": "res://Robot.gd"
+"path": "res://Robot/Robot.gd"
 }, {
-"base": "Node",
+"base": "Reference",
 "class": "System",
 "language": "GDScript",
-"path": "res://System.gd"
+"path": "res://Robot/System.gd"
 } ]
 _global_script_class_icons={
+"FallingObject": "",
 "Robot": "",
 "System": ""
 }
