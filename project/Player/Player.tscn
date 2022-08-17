@@ -34,3 +34,7 @@ shape = SubResource( 2 )
 [node name="MeleeCooldownTimer" type="Timer" parent="."]
 
 [node name="RangedCooldownTimer" type="Timer" parent="."]
+
+[node name="FiringPoint" type="Position2D" parent="."]
+unique_name_in_owner = true
+position = Vector2( 4, 5 )

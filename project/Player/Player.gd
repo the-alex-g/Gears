@@ -11,19 +11,25 @@ var _jump_speed := 475
 var _scrap := 40
 var _can_attack_melee := true
 var _can_attack_ranged := true
+var _direction := 1
 
 onready var _melee_cooldown_timer = $MeleeCooldownTimer as Timer
 onready var _ranged_cooldown_timer = $RangedCooldownTimer as Timer
 onready var _melee_hit_area = $"%AttackArea" as Area2D
+onready var _firing_point = $"%FiringPoint" as Position2D
 
 
 func _ready()->void:
 	_sword.equipped = true
+	_ranged.equipped = true
 
 
 func _physics_process(_delta:float)->void:
 	# get left/right movement
 	var horizontal := Input.get_axis("left", "right") * _horizontal_speed
+	if horizontal != 0:
+		# warning-ignore:narrowing_conversion
+		_direction = sign(horizontal)
 	
 	# jump
 	if is_on_floor():
@@ -55,6 +61,11 @@ func _melee_attack()->void:
 
 
 func _ranged_attack()->void:
+	var ammo = preload("res://Robot/Ammo.tscn").instance() as KinematicBody2D
+	ammo.direction.x *= _direction
+	ammo.position = _firing_point.global_position
+	ammo.good = true
+	get_parent().add_child(ammo)
 	_can_attack_ranged = false
 	_ranged_cooldown_timer.start(RANGED_COOLDOWN_TIME - _ranged.get_strength(WeaponPaths.COOLDOWN) * COOLDOWN_STEP)
 	yield(_ranged_cooldown_timer, "timeout")
