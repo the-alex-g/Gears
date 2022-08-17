@@ -45,7 +45,7 @@ func generate(level := 1)->void:
 	
 	# equip/upgrade extra systems
 	for upgrade in _upgrades - 1:
-		match randi() % 8:
+		match randi() % 10:
 			0, 1:
 				_sword = _upgrade_system(_sword)
 			2, 3:
@@ -56,6 +56,8 @@ func generate(level := 1)->void:
 				_drones = _upgrade_system(_drones)
 			7:
 				_health += 1
+			8, 9:
+				_speed += 50
 	
 	# randomize starting direction
 	match randi() % 2:

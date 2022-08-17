@@ -2,8 +2,10 @@ extends Robot
 
 signal update_hud(parameter_name, new_value, new_max)
 
+const STARTING_HEALTH := 6
+
 var _jump_speed := 475
-var _scrap := 0
+var _scrap := 40
 
 onready var _melee_hit_area = $"%AttackArea" as Area2D
 
@@ -55,5 +57,31 @@ func _draw():
 
 # do starting configuration of HUD here
 func _on_Main_ready()->void:
-	emit_signal("update_hud", "health", _health, true)
+	emit_signal("update_hud", "health", STARTING_HEALTH, true)
 	emit_signal("update_hud", "scrap", _scrap, false)
+
+
+func _on_Main_upgrade_system(system_name:String)->void:
+	match system_name:
+		"armor":
+			_health += 1
+			emit_signal("update_hud", "health", _health, true if _health > STARTING_HEALTH else false)
+		"drone":
+			if _drones.equipped:
+				_drones.upgrade()
+			else:
+				_drones.equipped = true
+		"movement":
+			_horizontal_speed += 50
+		"ranged":
+			if _ranged.equipped:
+				_ranged.upgrade()
+			else:
+				_ranged.equipped = true
+		"shield":
+			if _shield.equipped:
+				_shield.upgrade()
+			else:
+				_shield.equipped = true
+		"sword":
+			_sword.upgrade()

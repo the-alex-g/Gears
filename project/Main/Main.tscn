@@ -53,4 +53,6 @@ position = Vector2( 96, 0 )
 
 [connection signal="player_update_hud" from="." to="HUD" method="_on_Main_player_update_hud"]
 [connection signal="ready" from="." to="Player" method="_on_Main_ready"]
+[connection signal="upgrade_system" from="." to="Player" method="_on_Main_upgrade_system"]
 [connection signal="update_hud" from="Player" to="." method="_on_Player_update_hud"]
+[connection signal="upgrade_system" from="HUD" to="." method="_on_HUD_upgrade_system"]

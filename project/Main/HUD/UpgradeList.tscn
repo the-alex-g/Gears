@@ -1,0 +1,59 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Main/HUD/UpgradeList.gd" type="Script" id=1]
+
+[node name="UpgradeContainer" type="VBoxContainer"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 1 )
+
+[node name="ArmorUpgradeButton" type="Button" parent="."]
+unique_name_in_owner = true
+margin_right = 52.0
+margin_bottom = 20.0
+text = "Armor"
+
+[node name="DroneUpgradeButton" type="Button" parent="."]
+unique_name_in_owner = true
+visible = false
+margin_top = 24.0
+margin_right = 65.0
+margin_bottom = 44.0
+text = "Drones"
+
+[node name="MovementUpgradeButton" type="Button" parent="."]
+unique_name_in_owner = true
+margin_top = 24.0
+margin_right = 52.0
+margin_bottom = 44.0
+text = "Speed"
+
+[node name="RangedUpgradeButton" type="Button" parent="."]
+unique_name_in_owner = true
+visible = false
+margin_top = 48.0
+margin_right = 65.0
+margin_bottom = 68.0
+text = "Missiles"
+
+[node name="ShieldUpgradeButton" type="Button" parent="."]
+unique_name_in_owner = true
+visible = false
+margin_top = 48.0
+margin_right = 52.0
+margin_bottom = 68.0
+text = "Shield"
+
+[node name="SwordUpgradeButton" type="Button" parent="."]
+unique_name_in_owner = true
+margin_top = 48.0
+margin_right = 52.0
+margin_bottom = 68.0
+text = "Sword"
+
+[connection signal="pressed" from="ArmorUpgradeButton" to="." method="_on_ArmorUpgradeButton_pressed"]
+[connection signal="pressed" from="DroneUpgradeButton" to="." method="_on_DroneUpgradeButton_pressed"]
+[connection signal="pressed" from="MovementUpgradeButton" to="." method="_on_MovementUpgradeButton_pressed"]
+[connection signal="pressed" from="RangedUpgradeButton" to="." method="_on_RangedUpgradeButton_pressed"]
+[connection signal="pressed" from="ShieldUpgradeButton" to="." method="_on_ShieldUpgradeButton_pressed"]
+[connection signal="pressed" from="SwordUpgradeButton" to="." method="_on_SwordUpgradeButton_pressed"]

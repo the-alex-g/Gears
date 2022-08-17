@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Main/HUD/HUD.gd" type="Script" id=1]
+[ext_resource path="res://Main/HUD/UpgradeList.tscn" type="PackedScene" id=2]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource( 1 )
@@ -30,3 +31,8 @@ margin_left = -20.0
 margin_right = 20.0
 margin_bottom = 14.0
 grow_horizontal = 2
+
+[node name="UpgradeContainer" parent="Control" instance=ExtResource( 2 )]
+
+[connection signal="update_scrap" from="." to="Control/UpgradeContainer" method="_on_HUD_update_scrap"]
+[connection signal="upgrade_system" from="Control/UpgradeContainer" to="." method="_on_UpgradeContainer_upgrade_system"]
