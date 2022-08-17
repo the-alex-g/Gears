@@ -12,6 +12,7 @@ extents = Vector2( 16, 16 )
 collision_layer = 2
 collision_mask = 5
 script = ExtResource( 1 )
+is_player = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 16, 16 )
@@ -32,8 +33,10 @@ position = Vector2( 16, 16 )
 shape = SubResource( 2 )
 
 [node name="MeleeCooldownTimer" type="Timer" parent="."]
+unique_name_in_owner = true
 
 [node name="RangedCooldownTimer" type="Timer" parent="."]
+unique_name_in_owner = true
 
 [node name="FiringPoint" type="Position2D" parent="."]
 unique_name_in_owner = true

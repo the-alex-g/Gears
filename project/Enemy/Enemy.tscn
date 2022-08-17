@@ -1,10 +1,13 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Enemy/Enemy.gd" type="Script" id=1]
 [ext_resource path="res://icon.png" type="Texture" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 16.0
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 16, 16 )
 
 [node name="Enemy" type="KinematicBody2D"]
 position = Vector2( 16, 16 )
@@ -24,3 +27,24 @@ unique_name_in_owner = true
 position = Vector2( 34, 16 )
 enabled = true
 cast_to = Vector2( 0, 17 )
+
+[node name="AttackArea" type="Area2D" parent="Sprite"]
+unique_name_in_owner = true
+position = Vector2( 32, 0 )
+collision_layer = 2
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionPolygon2D" type="CollisionShape2D" parent="Sprite/AttackArea"]
+position = Vector2( 16, 16 )
+shape = SubResource( 2 )
+
+[node name="FiringPoint" type="Position2D" parent="Sprite"]
+unique_name_in_owner = true
+position = Vector2( 4, 5 )
+
+[node name="MeleeCooldownTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+
+[node name="RangedCooldownTimer" type="Timer" parent="."]
+unique_name_in_owner = true
