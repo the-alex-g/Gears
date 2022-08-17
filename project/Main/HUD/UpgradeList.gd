@@ -1,6 +1,6 @@
 extends VBoxContainer
 
-signal upgrade_system(system_name, scrap_reduction)
+signal upgrade_system(system_name, scrap_reduction, path)
 
 enum Upgrades {DRONE, MOVEMENT, RANGED, SHIELD, SWORD}
 
@@ -14,6 +14,7 @@ onready var _movement_upgrade = $"%MovementUpgradeButton" as Button
 onready var _ranged_upgrade = $"%RangedUpgradeButton" as Button
 onready var _shield_upgrade = $"%ShieldUpgradeButton" as Button
 onready var _sword_upgrade = $"%SwordUpgradeButton" as Button
+onready var _upgrade_path_widget = $UpgradePathWidget as VBoxContainer
 
 var _drone_equipped := false
 var _shield_equipped := false
@@ -21,9 +22,8 @@ var _ranged_equipped := false
 var _upgrades := [0, 0, 0, 0, 0]
 
 
-
 func _on_ArmorUpgradeButton_pressed()->void:
-	emit_signal("upgrade_system", "armor", REPAIR_THRESHOLD)
+	emit_signal("upgrade_system", "armor", REPAIR_THRESHOLD, 0)
 
 
 func _on_DroneUpgradeButton_pressed()->void:
@@ -34,7 +34,9 @@ func _on_DroneUpgradeButton_pressed()->void:
 	else:
 		cost = NEW_SYSTEM
 		_drone_equipped = true
-	emit_signal("upgrade_system", "drone", cost)
+	_upgrade_path_widget.initialize("drone")
+	var path = yield(_upgrade_path_widget, "path_selected") as int
+	emit_signal("upgrade_system", "drone", cost, path)
 
 
 func _on_MovementUpgradeButton_pressed()->void:
@@ -50,7 +52,9 @@ func _on_RangedUpgradeButton_pressed()->void:
 	else:
 		cost = NEW_SYSTEM
 		_ranged_equipped = true
-	emit_signal("upgrade_system", "ranged", cost)
+	_upgrade_path_widget.initialize("ranged")
+	var path = yield(_upgrade_path_widget, "path_selected") as int
+	emit_signal("upgrade_system", "ranged", cost, path)
 
 
 func _on_ShieldUpgradeButton_pressed()->void:
@@ -66,7 +70,9 @@ func _on_ShieldUpgradeButton_pressed()->void:
 
 func _on_SwordUpgradeButton_pressed()->void:
 	_upgrades[Upgrades.SWORD] += 1
-	emit_signal("upgrade_system", "sword", _upgrades[Upgrades.SWORD] * UPGRADE_STEP)
+	_upgrade_path_widget.initialize("sword")
+	var path = yield(_upgrade_path_widget, "path_selected") as int
+	emit_signal("upgrade_system", "sword", _upgrades[Upgrades.SWORD] * UPGRADE_STEP, path)
 
 
 func _on_HUD_update_scrap(new_value:int)->void:

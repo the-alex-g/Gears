@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Main/HUD/UpgradeList.gd" type="Script" id=1]
+[ext_resource path="res://Main/HUD/UpgradePathWidget.tscn" type="PackedScene" id=2]
 
 [node name="UpgradeContainer" type="VBoxContainer"]
 margin_right = 40.0
@@ -50,6 +51,11 @@ margin_top = 48.0
 margin_right = 52.0
 margin_bottom = 68.0
 text = "Sword"
+
+[node name="UpgradePathWidget" parent="." instance=ExtResource( 2 )]
+margin_top = 72.0
+margin_right = 52.0
+margin_bottom = 72.0
 
 [connection signal="pressed" from="ArmorUpgradeButton" to="." method="_on_ArmorUpgradeButton_pressed"]
 [connection signal="pressed" from="DroneUpgradeButton" to="." method="_on_DroneUpgradeButton_pressed"]

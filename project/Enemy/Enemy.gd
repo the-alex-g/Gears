@@ -69,7 +69,7 @@ func generate(level := 1)->void:
 
 func _upgrade_system(system:System)->System:
 	if system.equipped:
-		system.upgrade()
+		system.upgrade(randi() % system.upgrade_paths)
 	else:
 		system.equipped = true
 	return system

@@ -2,18 +2,19 @@ class_name System
 extends Node
 
 var equipped := false
-var upgrades := 1
-var strength := 0 setget , get_strength
+var upgrades = [] as PoolIntArray
+var upgrade_paths : int
 
-func _init(starting_equip:bool, starting_upgrades:int)->void:
-	equipped = starting_equip
-	upgrades = starting_upgrades
-
-
-func upgrade()->void:
-	if upgrades < 3:
-		upgrades += 1
+func _init(total_upgrade_paths := 1)->void:
+	upgrade_paths = total_upgrade_paths
+	for path in total_upgrade_paths:
+		upgrades.append(0)
 
 
-func get_strength()->int:
-	return upgrades + 1
+func upgrade(path := 0)->void:
+	if upgrades[path] < 3:
+		upgrades[path] += 1
+
+
+func get_strength(path := 0)->int:
+	return upgrades[path] + 1
