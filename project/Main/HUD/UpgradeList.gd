@@ -19,14 +19,25 @@ onready var _upgrade_path_widget = $UpgradePathWidget as VBoxContainer
 var _drone_equipped := false
 var _shield_equipped := false
 var _ranged_equipped := false
+var _waiting_for_answer := false
 var _upgrades := [0, 0, 0, 0, 0]
 
 
 func _on_ArmorUpgradeButton_pressed()->void:
+	if _waiting_for_answer:
+		return
 	emit_signal("upgrade_system", "armor", REPAIR_THRESHOLD, 0)
 
 
 func _on_DroneUpgradeButton_pressed()->void:
+	if _waiting_for_answer:
+		return
+	var path := -1
+	if _drone_equipped:
+		_upgrade_path_widget.initialize("drone")
+		_waiting_for_answer = true
+		path = yield(_upgrade_path_widget, "path_selected")
+		_waiting_for_answer = false
 	var cost := 0
 	if _drone_equipped:
 		cost = (_upgrades[Upgrades.DRONE] + 1) * UPGRADE_STEP
@@ -34,17 +45,25 @@ func _on_DroneUpgradeButton_pressed()->void:
 	else:
 		cost = NEW_SYSTEM
 		_drone_equipped = true
-	_upgrade_path_widget.initialize("drone")
-	var path = yield(_upgrade_path_widget, "path_selected") as int
 	emit_signal("upgrade_system", "drone", cost, path)
 
 
 func _on_MovementUpgradeButton_pressed()->void:
+	if _waiting_for_answer:
+		return
 	_upgrades[Upgrades.MOVEMENT] += 1
 	emit_signal("upgrade_system", "movement", _upgrades[Upgrades.MOVEMENT] * UPGRADE_STEP, 0)
 
 
 func _on_RangedUpgradeButton_pressed()->void:
+	if _waiting_for_answer:
+		return
+	var path := -1
+	if _ranged_equipped:
+		_upgrade_path_widget.initialize("ranged")
+		_waiting_for_answer = true
+		path = yield(_upgrade_path_widget, "path_selected")
+		_waiting_for_answer = false
 	var cost := 0
 	if _ranged_equipped:
 		cost = (_upgrades[Upgrades.RANGED] + 1) * UPGRADE_STEP
@@ -52,12 +71,12 @@ func _on_RangedUpgradeButton_pressed()->void:
 	else:
 		cost = NEW_SYSTEM
 		_ranged_equipped = true
-	_upgrade_path_widget.initialize("ranged")
-	var path = yield(_upgrade_path_widget, "path_selected") as int
 	emit_signal("upgrade_system", "ranged", cost, path)
 
 
 func _on_ShieldUpgradeButton_pressed()->void:
+	if _waiting_for_answer:
+		return
 	var cost := 0
 	if _shield_equipped:
 		cost = (_upgrades[Upgrades.SHIELD] + 1) * UPGRADE_STEP
@@ -69,9 +88,13 @@ func _on_ShieldUpgradeButton_pressed()->void:
 
 
 func _on_SwordUpgradeButton_pressed()->void:
+	if _waiting_for_answer:
+		return
 	_upgrades[Upgrades.SWORD] += 1
 	_upgrade_path_widget.initialize("sword")
+	_waiting_for_answer = true
 	var path = yield(_upgrade_path_widget, "path_selected") as int
+	_waiting_for_answer = false
 	emit_signal("upgrade_system", "sword", _upgrades[Upgrades.SWORD] * UPGRADE_STEP, path)
 
 
