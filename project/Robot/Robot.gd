@@ -26,7 +26,6 @@ onready var _melee_cooldown_timer = $"%MeleeCooldownTimer" as Timer
 onready var _ranged_cooldown_timer = $"%RangedCooldownTimer" as Timer
 onready var _melee_hit_area = $"%AttackArea" as Area2D
 onready var _sprite = $"%Sprite" as Sprite
-onready var _cooldown_bonus := 0.0 if is_player else 0.5
 
 
 func _process(_delta:float)->void:
@@ -41,10 +40,7 @@ func _melee_attack()->void:
 	for body in _melee_hit_area.get_overlapping_bodies():
 		if body.has_method("hit"):
 			body.hit(_sword.get_strength(WeaponPaths.DAMAGE))
-	_can_attack_melee = false
-	_melee_cooldown_timer.start(MELEE_COOLDOWN_TIME - _sword.get_strength(WeaponPaths.COOLDOWN) * COOLDOWN_STEP + _cooldown_bonus)
-	yield(_melee_cooldown_timer, "timeout")
-	_can_attack_melee = true
+	_start_melee_cooldown()
 
 
 func _ranged_attack()->void:
@@ -54,6 +50,17 @@ func _ranged_attack()->void:
 	ammo.good = is_player
 	ammo.damage = _ranged.get_strength(WeaponPaths.DAMAGE)
 	get_parent().add_child(ammo)
+	_start_ranged_cooldown()
+
+
+func _start_melee_cooldown()->void:
+	_can_attack_melee = false
+	_melee_cooldown_timer.start(MELEE_COOLDOWN_TIME - _sword.get_strength(WeaponPaths.COOLDOWN) * COOLDOWN_STEP)
+	yield(_melee_cooldown_timer, "timeout")
+	_can_attack_melee = true
+
+
+func _start_ranged_cooldown()->void:
 	_can_attack_ranged = false
 	_ranged_cooldown_timer.start(RANGED_COOLDOWN_TIME - _ranged.get_strength(WeaponPaths.COOLDOWN) * COOLDOWN_STEP)
 	yield(_ranged_cooldown_timer, "timeout")
