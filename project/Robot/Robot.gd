@@ -32,15 +32,44 @@ onready var _melee_cooldown_timer = $MeleeCooldownTimer as Timer
 onready var _ranged_cooldown_timer = $RangedCooldownTimer as Timer
 onready var _drone_deploy_timer = $DroneDeployTimer as Timer
 onready var _melee_hit_area = $"%AttackArea" as Area2D
-onready var _sprite = $"%Sprite" as Sprite
+onready var _body = $"%Body" as Node2D
+# sprites
+onready var _left_arm = $"%LeftArm" as AnimatedSprite
+onready var _main_body = $"%MainBody" as AnimatedSprite
+onready var _right_arm = $"%RightArm" as AnimatedSprite
+onready var _launcher = $"%Launcher" as AnimatedSprite
 
 
 func _process(_delta:float)->void:
 	# flip sprite to match movement direction
 	if _direction < 0:
-		_sprite.scale.x = -1
+		_body.scale.x = -1
+	elif _direction > 0:
+		_body.scale.x = 1
+	
+	if _direction == 0:
+		_left_arm.play("IdleShield")
+		_main_body.play("Idle")
+		if _launcher.animation != "Fire" or _launcher.frame == 4:
+			_launcher.play("Idle")
+			if _launcher.frame != _main_body.frame:
+				_launcher.frame = _main_body.frame
+		if _right_arm.animation != "Attack" or _right_arm.frame == 2:
+			_right_arm.play("IdleSword")
+			if _right_arm.frame != _main_body.frame:
+				_right_arm.frame = _main_body.frame
 	else:
-		_sprite.scale.x = 1
+		_left_arm.play("RunShield")
+		_right_arm.play("RunSword")
+		_main_body.play("Run")
+		if _launcher.animation != "Fire" or _launcher.frame == 4:
+			_launcher.play("Run")
+			if _launcher.frame != _main_body.frame:
+				_launcher.frame = _main_body.frame
+		if _right_arm.animation != "Attack" or _right_arm.frame == 2:
+			_right_arm.play("RunSword")
+			if _right_arm.frame != _main_body.frame:
+				_right_arm.frame = _main_body.frame
 
 
 func _deploy_drone()->void:
@@ -70,6 +99,7 @@ func _on_drone_destroyed()->void:
 
 
 func _melee_attack()->void:
+	_right_arm.play("Attack")
 	for body in _melee_hit_area.get_overlapping_bodies():
 		if body.has_method("hit"):
 			body.hit(_sword.get_strength(WeaponPaths.DAMAGE))
@@ -77,11 +107,12 @@ func _melee_attack()->void:
 
 
 func _ranged_attack()->void:
+	_launcher.play("Fire")
 	_can_attack_ranged = false
 	var Ammo := preload("res://Robot/Ammo/Ammo.tscn")
 	for i in _ranged.get_strength(WeaponPaths.DAMAGE):
 		var ammo = Ammo.instance() as KinematicBody2D
-		ammo.direction.x *= _direction
+		ammo.direction.x *= _body.scale.x
 		ammo.position = _firing_point.global_position
 		ammo.good = is_player
 		ammo.damage = _ranged.get_strength(WeaponPaths.DAMAGE)
@@ -113,4 +144,4 @@ func hit(damage_dealt:int)->void:
 
 
 func get_global_position()->Vector2:
-	return global_position + _sprite.position
+	return global_position + _body.position

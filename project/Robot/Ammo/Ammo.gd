@@ -1,10 +1,10 @@
 extends FallingObject
 
-const SPEED_DECREASE_PER_SECOND := 100.0
+const SPEED_DECREASE_PER_SECOND := 50.0
 const ANIM_LENGTH := 8
 
 var direction := Vector2(1, 0).rotated( - TAU / 14)
-var _speed := 800.0
+var _speed := 400.0
 var good : bool setget _set_good
 var damage := 0
 var index : int setget _set_index

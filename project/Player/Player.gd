@@ -5,7 +5,7 @@ signal update_hud(parameter_name, new_value, new_max)
 
 const STARTING_HEALTH := 6
 
-var _jump_speed := 475
+var _jump_speed := 250
 var _scrap := 40
 
 
@@ -17,9 +17,8 @@ func _ready()->void:
 func _physics_process(_delta:float)->void:
 	# get left/right movement
 	var horizontal := Input.get_axis("left", "right") * _horizontal_speed
-	if horizontal != 0:
-		# warning-ignore:narrowing_conversion
-		_direction = sign(horizontal)
+	# warning-ignore:narrowing_conversion
+	_direction = sign(horizontal)
 	
 	# jump
 	if is_on_floor():
@@ -46,10 +45,6 @@ func _physics_process(_delta:float)->void:
 func hit(damage_dealt:int)->void:
 	.hit(damage_dealt)
 	emit_signal("update_hud", "health", _health, false)
-
-
-func _draw():
-	draw_circle(Vector2.ONE * 16, 16, Color.red)
 
 
 # do starting configuration of HUD here,

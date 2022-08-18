@@ -124,7 +124,7 @@ func _upgrade_system(system:System)->System:
 
 
 func _update_target_reachable()->void:
-	var intersection := get_world_2d().direct_space_state.intersect_ray(_sprite.global_position, _target.global_position, [self])
+	var intersection := get_world_2d().direct_space_state.intersect_ray(get_global_position(), _target.global_position, [self])
 	if intersection.size() > 0:
 		_is_target_reachable = intersection.collider == _target
 	else:

@@ -3,7 +3,7 @@ extends KinematicBody2D
 
 const GRAVITY := 20
 
-var _max_fall_speed := 600
+var _max_fall_speed := 400
 var _current_vertical_speed := 0
 
 
