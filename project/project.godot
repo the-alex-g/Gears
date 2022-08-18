@@ -57,6 +57,12 @@ window/stretch/aspect="keep"
 
 script_templates_search_path="../template_scripts"
 
+[importer_defaults]
+
+texture={
+"flags/filter": false
+}
+
 [input]
 
 left={
