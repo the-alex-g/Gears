@@ -77,13 +77,20 @@ func _melee_attack()->void:
 
 
 func _ranged_attack()->void:
-	var ammo = preload("res://Robot/Ammo/Ammo.tscn").instance() as KinematicBody2D
-	ammo.direction.x *= _direction
-	ammo.position = _firing_point.global_position
-	ammo.good = is_player
-	ammo.damage = _ranged.get_strength(WeaponPaths.DAMAGE)
-	get_parent().add_child(ammo)
-	_start_ranged_cooldown()
+	_can_attack_ranged = false
+	var Ammo := preload("res://Robot/Ammo/Ammo.tscn")
+	for i in _ranged.get_strength(WeaponPaths.DAMAGE):
+		var ammo = Ammo.instance() as KinematicBody2D
+		ammo.direction.x *= _direction
+		ammo.position = _firing_point.global_position
+		ammo.good = is_player
+		ammo.damage = _ranged.get_strength(WeaponPaths.DAMAGE)
+		ammo.index = i
+		get_parent().add_child(ammo)
+		yield(get_tree().create_timer(0.1), "timeout")
+	_ranged_cooldown_timer.start(RANGED_COOLDOWN_TIME - _ranged.get_strength(WeaponPaths.COOLDOWN) * COOLDOWN_STEP)
+	yield(_ranged_cooldown_timer, "timeout")
+	_can_attack_ranged = true
 
 
 func _start_melee_cooldown()->void:
@@ -91,13 +98,6 @@ func _start_melee_cooldown()->void:
 	_melee_cooldown_timer.start(MELEE_COOLDOWN_TIME - _sword.get_strength(WeaponPaths.COOLDOWN) * COOLDOWN_STEP)
 	yield(_melee_cooldown_timer, "timeout")
 	_can_attack_melee = true
-
-
-func _start_ranged_cooldown()->void:
-	_can_attack_ranged = false
-	_ranged_cooldown_timer.start(RANGED_COOLDOWN_TIME - _ranged.get_strength(WeaponPaths.COOLDOWN) * COOLDOWN_STEP)
-	yield(_ranged_cooldown_timer, "timeout")
-	_can_attack_ranged = true
 
 
 func hit(damage_dealt:int)->void:

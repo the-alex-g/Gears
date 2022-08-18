@@ -136,8 +136,6 @@ func _draw()->void:
 
 
 func _on_PlayerDetectionArea_body_entered(body:PhysicsBody2D)->void:
-	if body is Drone:
-		print("target drone")
 	_target = body
 
 

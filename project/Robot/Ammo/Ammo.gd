@@ -6,6 +6,7 @@ var direction := Vector2(1, 0).rotated( - TAU / 14)
 var _speed := 800.0
 var good : bool setget _set_good
 var damage := 0
+var index : int setget _set_index
 
 
 func _physics_process(delta:float)->void:
@@ -31,3 +32,7 @@ func _set_good(value:bool)->void:
 		set_collision_mask_bit(1, false)
 	else:
 		set_collision_mask_bit(2, false)
+
+
+func _set_index(value:int)->void:
+	_speed -= (value - 1) * 100
