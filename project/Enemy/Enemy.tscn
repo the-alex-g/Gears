@@ -35,7 +35,7 @@ cast_to = Vector2( 0, 17 )
 unique_name_in_owner = true
 position = Vector2( 16, -16 )
 collision_layer = 0
-collision_mask = 2
+collision_mask = 18
 monitorable = false
 
 [node name="CollisionPolygon2D" type="CollisionShape2D" parent="Sprite/AttackArea"]
@@ -48,17 +48,17 @@ position = Vector2( -12, -11 )
 
 [node name="PlayerDetectionArea" type="Area2D" parent="."]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 18
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionArea"]
 position = Vector2( 16, 0 )
 shape = SubResource( 3 )
 
 [node name="MeleeCooldownTimer" type="Timer" parent="."]
-unique_name_in_owner = true
 
 [node name="RangedCooldownTimer" type="Timer" parent="."]
-unique_name_in_owner = true
+
+[node name="DroneDeployTimer" type="Timer" parent="."]
 
 [connection signal="body_entered" from="Sprite/AttackArea" to="." method="_on_AttackArea_body_entered"]
 [connection signal="body_exited" from="Sprite/AttackArea" to="." method="_on_AttackArea_body_exited"]

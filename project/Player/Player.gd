@@ -1,3 +1,4 @@
+class_name Player
 extends Robot
 
 signal update_hud(parameter_name, new_value, new_max)
@@ -35,6 +36,10 @@ func _physics_process(_delta:float)->void:
 		_melee_attack()
 	if Input.is_action_just_pressed("ranged") and _ranged.equipped and _can_attack_ranged:
 		_ranged_attack()
+	
+	# drones
+	if Input.is_action_just_pressed("deploy_drones") and _drones.equipped and _can_deploy_drone and _drones_deployed < MAX_DRONES:
+		_deploy_drone()
 
 
 # custom hit function is needed to update the HUD after taking damage

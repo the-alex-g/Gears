@@ -41,7 +41,7 @@ unique_name_in_owner = true
 position = Vector2( -12, -11 )
 
 [node name="MeleeCooldownTimer" type="Timer" parent="."]
-unique_name_in_owner = true
 
 [node name="RangedCooldownTimer" type="Timer" parent="."]
-unique_name_in_owner = true
+
+[node name="DroneDeployTimer" type="Timer" parent="."]

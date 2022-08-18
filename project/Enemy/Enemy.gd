@@ -21,6 +21,10 @@ func _ready():
 
 
 func _physics_process(_delta:float)->void:
+	# deploy drones
+	if _drones.equipped and _drones_deployed < MAX_DRONES and _can_deploy_drone:
+		_deploy_drone()
+	
 	# get left/right movement
 	var horizontal = _direction * _speed
 	
@@ -35,10 +39,6 @@ func _physics_process(_delta:float)->void:
 	var movement = Vector2(horizontal, _current_vertical_speed)
 	# warning-ignore:return_value_discarded
 	move_and_slide(movement, Vector2.UP)
-	
-	# change direction if necessary
-	if (is_on_wall() and (_target == null or not _is_target_reachable)) or not _turn_detector.is_colliding():
-		_direction *= -1
 	
 	# AI function
 	if _target != null:
@@ -59,6 +59,10 @@ func _physics_process(_delta:float)->void:
 	
 		# update line-of-sight
 		_update_target_reachable()
+	
+	# change direction if necessary
+	if (is_on_wall() and (_target == null or not _is_target_reachable)) or not _turn_detector.is_colliding():
+		_direction *= -1
 
 
 func generate(level := 1)->void:
@@ -132,6 +136,8 @@ func _draw()->void:
 
 
 func _on_PlayerDetectionArea_body_entered(body:PhysicsBody2D)->void:
+	if body is Drone:
+		print("target drone")
 	_target = body
 
 
@@ -140,9 +146,10 @@ func _on_PlayerDetectionArea_body_exited(_body:PhysicsBody2D)->void:
 	_is_target_reachable = false
 
 
-func _on_AttackArea_body_entered(_body:PhysicsBody2D)->void:
+func _on_AttackArea_body_entered(body:PhysicsBody2D)->void:
 	_is_target_in_range = true
-	_start_melee_cooldown()
+	if body is Player:
+		_start_melee_cooldown()
 
 
 func _on_AttackArea_body_exited(_body:PhysicsBody2D)->void:

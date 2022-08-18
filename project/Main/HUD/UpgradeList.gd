@@ -41,7 +41,7 @@ func _on_DroneUpgradeButton_pressed()->void:
 
 func _on_MovementUpgradeButton_pressed()->void:
 	_upgrades[Upgrades.MOVEMENT] += 1
-	emit_signal("upgrade_system", "movement", _upgrades[Upgrades.MOVEMENT] * UPGRADE_STEP)
+	emit_signal("upgrade_system", "movement", _upgrades[Upgrades.MOVEMENT] * UPGRADE_STEP, 0)
 
 
 func _on_RangedUpgradeButton_pressed()->void:
