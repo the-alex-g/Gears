@@ -114,6 +114,7 @@ func generate(level := 1)->void:
 	
 	if _ranged.equipped:
 		_player_detection_area_collision.shape.extents.x = RANGED_DETECTION_DISTANCE
+		_launcher.visible = true
 
 
 func _upgrade_system(system:System)->System:

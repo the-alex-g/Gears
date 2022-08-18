@@ -11,7 +11,6 @@ var _scrap := 40
 
 func _ready()->void:
 	_sword.equipped = true
-	_ranged.equipped = true
 
 
 func get_global_position()->Vector2:
@@ -76,6 +75,7 @@ func _on_Main_upgrade_system(system_name:String, path:int)->void:
 				_ranged.upgrade(path)
 			else:
 				_ranged.equipped = true
+				_launcher.visible = true
 		"shield":
 			if _shield.equipped:
 				_shield.upgrade()

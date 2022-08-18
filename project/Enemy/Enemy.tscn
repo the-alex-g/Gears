@@ -239,6 +239,7 @@ animation = "Attack"
 
 [node name="Launcher" type="AnimatedSprite" parent="Body/MainBody"]
 unique_name_in_owner = true
+visible = false
 frames = SubResource( 44 )
 animation = "Fire"
 frame = 4
