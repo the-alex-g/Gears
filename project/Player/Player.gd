@@ -14,6 +14,10 @@ func _ready()->void:
 	_ranged.equipped = true
 
 
+func get_global_position()->Vector2:
+	return $CenterPoint.global_position
+
+
 func _physics_process(_delta:float)->void:
 	# get left/right movement
 	var horizontal := Input.get_axis("left", "right") * _horizontal_speed

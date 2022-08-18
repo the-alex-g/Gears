@@ -260,3 +260,6 @@ position = Vector2( -1, -1 )
 [node name="RangedCooldownTimer" type="Timer" parent="."]
 
 [node name="DroneDeployTimer" type="Timer" parent="."]
+
+[node name="CenterPoint" type="Position2D" parent="."]
+position = Vector2( 8, 16 )

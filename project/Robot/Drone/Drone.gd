@@ -5,13 +5,13 @@ signal destroyed
 
 const COOLDOWN_TIME := 1
 const MAX_DISTANCE_FROM_OWNER := 50
-const TERMINATION_DISTANCE := 400
+const TERMINATION_DISTANCE := 200
 
 var good : bool setget _set_good
 var drone_owner : KinematicBody2D
 var damage : int
 var health : int
-var speed := 200
+var speed := 150
 var direction := 1
 var _is_target_in_range := false
 var _is_target_reachable := false
@@ -20,7 +20,7 @@ var _can_attack := true
 
 onready var _attack_area = $"%AttackArea" as Area2D
 onready var _detection_area = $"%DetectionArea" as Area2D
-onready var _sprite = $"%Sprite" as Sprite
+onready var _sprite = $"%Sprite" as AnimatedSprite
 onready var _turn_detector = $"%TurnDetector" as RayCast2D
 onready var _cooldown_timer = $CooldownTimer as Timer
 
@@ -97,7 +97,14 @@ func hit(damage_dealt:int, send_signal:bool = true)->void:
 	if health <= 0:
 		if send_signal:
 			emit_signal("destroyed")
+		var explosion = preload("res://Explosion/Explosion.tscn").instance() as AnimatedSprite
+		explosion.position = get_global_position()
+		get_parent().add_child(explosion)
 		queue_free()
+
+
+func get_global_position()->Vector2:
+	return $CenterPoint.global_position
 
 
 func _on_AttackArea_body_entered(_body:PhysicsBody2D)->void:
@@ -150,7 +157,3 @@ func _set_target(value:KinematicBody2D)->void:
 		if not value.is_connected("destroyed", self, "_on_target_destroyed"):
 			value.connect("destroyed", self, "_on_target_destroyed", [], CONNECT_ONESHOT)
 	_target = value
-
-
-func _draw()->void:
-	draw_circle(_sprite.position, 8, Color.yellow)

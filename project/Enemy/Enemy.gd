@@ -14,6 +14,7 @@ var _is_target_reachable := false
 
 onready var _turn_detector = $"%TurnDetector" as RayCast2D
 onready var _player_detection_area_collision = $PlayerDetectionArea/CollisionShape2D as CollisionShape2D
+onready var _center_point = $"%CenterPoint" as Position2D
 
 
 func _ready():
@@ -124,15 +125,11 @@ func _upgrade_system(system:System)->System:
 
 
 func _update_target_reachable()->void:
-	var intersection := get_world_2d().direct_space_state.intersect_ray(get_global_position(), _target.global_position, [self])
+	var intersection := get_world_2d().direct_space_state.intersect_ray(_center_point.global_position, _target.get_global_position(), [self])
 	if intersection.size() > 0:
 		_is_target_reachable = intersection.collider == _target
 	else:
 		_is_target_reachable = false
-
-
-func _draw()->void:
-	draw_circle(Vector2.ONE * 16, 16, Color.greenyellow)
 
 
 func _on_PlayerDetectionArea_body_entered(body:PhysicsBody2D)->void:
