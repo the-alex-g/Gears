@@ -48,26 +48,26 @@ func _process(_delta:float)->void:
 		_body.scale.x = 1
 	
 	if _direction == 0:
-		_left_arm.play("IdleShield")
+		_left_arm.play("Idle" + ("Shield" if _shield.equipped else ""))
 		_main_body.play("Idle")
-		if _launcher.animation != "Fire" or _launcher.frame == 4:
+		if _launcher.animation != "Fire" or (_launcher.animation == "Fire" and _launcher.frame == 4):
 			_launcher.play("Idle")
 			if _launcher.frame != _main_body.frame:
 				_launcher.frame = _main_body.frame
-		if _right_arm.animation != "Attack" or _right_arm.frame == 2:
-			_right_arm.play("IdleSword")
+		if _right_arm.animation != "Attack" or (_right_arm.animation == "Attack" and _right_arm.frame == 2):
+			_right_arm.play("Idle" + ("Sword" if _sword.equipped else ""))
 			if _right_arm.frame != _main_body.frame:
 				_right_arm.frame = _main_body.frame
 	else:
-		_left_arm.play("RunShield")
+		_left_arm.play("Run" + ("Shield" if _shield.equipped else ""))
 		_right_arm.play("RunSword")
 		_main_body.play("Run")
-		if _launcher.animation != "Fire" or _launcher.frame == 4:
+		if _launcher.animation != "Fire" or (_launcher.animation == "Fire" and _launcher.frame == 4):
 			_launcher.play("Run")
 			if _launcher.frame != _main_body.frame:
 				_launcher.frame = _main_body.frame
-		if _right_arm.animation != "Attack" or _right_arm.frame == 2:
-			_right_arm.play("RunSword")
+		if _right_arm.animation != "Attack" or (_right_arm.animation == "Attack" and _right_arm.frame == 2):
+			_right_arm.play("Run" + ("Sword" if _sword.equipped else ""))
 			if _right_arm.frame != _main_body.frame:
 				_right_arm.frame = _main_body.frame
 

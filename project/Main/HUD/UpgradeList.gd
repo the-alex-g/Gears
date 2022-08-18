@@ -65,7 +65,7 @@ func _on_ShieldUpgradeButton_pressed()->void:
 	else:
 		cost = NEW_SYSTEM
 		_shield_equipped = true
-	emit_signal("upgrade_system", "shield", cost)
+	emit_signal("upgrade_system", "shield", cost, 0)
 
 
 func _on_SwordUpgradeButton_pressed()->void:

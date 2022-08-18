@@ -225,7 +225,7 @@ position = Vector2( 8, 8 )
 [node name="LeftArm" type="AnimatedSprite" parent="Body"]
 unique_name_in_owner = true
 frames = ExtResource( 2 )
-animation = "Attack"
+animation = "Run"
 
 [node name="MainBody" type="AnimatedSprite" parent="Body"]
 unique_name_in_owner = true
@@ -235,7 +235,7 @@ animation = "Run"
 [node name="RightArm" type="AnimatedSprite" parent="Body/MainBody"]
 unique_name_in_owner = true
 frames = ExtResource( 2 )
-animation = "Attack"
+animation = "Run"
 
 [node name="Launcher" type="AnimatedSprite" parent="Body/MainBody"]
 unique_name_in_owner = true
