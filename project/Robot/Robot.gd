@@ -58,13 +58,17 @@ func _process(_delta:float)->void:
 		_play_anims("Idle")
 	elif _current_vertical_speed == 0:
 		_play_anims("Run")
-	else:
+	elif _current_vertical_speed < 100:
 		_play_anims("Jump")
+	elif _current_vertical_speed > 0:
+		_play_anims("Fall")
 
 
 func _play_anims(anim_name:String)->void:
-	_left_arm.play(anim_name + ("Shield" if _shield.equipped else ""))
 	_main_body.play(anim_name)
+	if anim_name == "Fall":
+		anim_name = "Jump"
+	_left_arm.play(anim_name + ("Shield" if _shield.equipped else ""))
 	if _launcher.animation != "Attack" or (_launcher.animation == "Attack" and _launcher.frame == 4):
 		_launcher.play(anim_name)
 		if _launcher.frame != _main_body.frame:
