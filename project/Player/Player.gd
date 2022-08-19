@@ -11,8 +11,6 @@ var _scrap := 40
 
 func _ready()->void:
 	_sword.equipped = true
-	_ranged.equipped = true
-	_launcher.show()
 
 
 func get_global_position()->Vector2:

@@ -54,11 +54,11 @@ func _process(_delta:float)->void:
 	elif _direction > 0:
 		_body.scale.x = 1
 	
-	if _direction == 0:
+	if _direction == 0 and _current_vertical_speed == 0:
 		_play_anims("Idle")
 	elif _current_vertical_speed == 0:
 		_play_anims("Run")
-	elif _current_vertical_speed != 0:
+	else:
 		_play_anims("Jump")
 
 
