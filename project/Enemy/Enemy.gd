@@ -22,6 +22,8 @@ func _ready():
 
 
 func _physics_process(_delta:float)->void:
+	if _health <= 0:
+		return
 	# deploy drones
 	if _drones.equipped and _drones_deployed < MAX_DRONES and _can_deploy_drone:
 		_deploy_drone()

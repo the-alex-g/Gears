@@ -40,7 +40,14 @@ onready var _right_arm = $"%RightArm" as AnimatedSprite
 onready var _launcher = $"%Launcher" as AnimatedSprite
 
 
+func _ready()->void:
+	_main_body.connect("animation_finished", self, "_on_animation_finished")
+
+
 func _process(_delta:float)->void:
+	if _health <= 0:
+		_play_anims("Death")
+		return
 	# flip sprite to match movement direction
 	if _direction < 0:
 		_body.scale.x = -1
@@ -48,28 +55,24 @@ func _process(_delta:float)->void:
 		_body.scale.x = 1
 	
 	if _direction == 0:
-		_left_arm.play("Idle" + ("Shield" if _shield.equipped else ""))
-		_main_body.play("Idle")
-		if _launcher.animation != "Fire" or (_launcher.animation == "Fire" and _launcher.frame == 4):
-			_launcher.play("Idle")
-			if _launcher.frame != _main_body.frame:
-				_launcher.frame = _main_body.frame
-		if _right_arm.animation != "Attack" or (_right_arm.animation == "Attack" and _right_arm.frame == 2):
-			_right_arm.play("Idle" + ("Sword" if _sword.equipped else ""))
-			if _right_arm.frame != _main_body.frame:
-				_right_arm.frame = _main_body.frame
-	else:
-		_left_arm.play("Run" + ("Shield" if _shield.equipped else ""))
-		_right_arm.play("RunSword")
-		_main_body.play("Run")
-		if _launcher.animation != "Fire" or (_launcher.animation == "Fire" and _launcher.frame == 4):
-			_launcher.play("Run")
-			if _launcher.frame != _main_body.frame:
-				_launcher.frame = _main_body.frame
-		if _right_arm.animation != "Attack" or (_right_arm.animation == "Attack" and _right_arm.frame == 2):
-			_right_arm.play("Run" + ("Sword" if _sword.equipped else ""))
-			if _right_arm.frame != _main_body.frame:
-				_right_arm.frame = _main_body.frame
+		_play_anims("Idle")
+	elif _current_vertical_speed == 0:
+		_play_anims("Run")
+	elif _current_vertical_speed != 0:
+		_play_anims("Jump")
+
+
+func _play_anims(anim_name:String)->void:
+	_left_arm.play(anim_name + ("Shield" if _shield.equipped else ""))
+	_main_body.play(anim_name)
+	if _launcher.animation != "Attack" or (_launcher.animation == "Attack" and _launcher.frame == 4):
+		_launcher.play(anim_name)
+		if _launcher.frame != _main_body.frame:
+			_launcher.frame = _main_body.frame
+	if _right_arm.animation != "Attack" or (_right_arm.animation == "Attack" and _right_arm.frame == 2):
+		_right_arm.play(anim_name + ("Sword" if _sword.equipped else ""))
+		if _right_arm.frame != _main_body.frame:
+			_right_arm.frame = _main_body.frame
 
 
 func _deploy_drone()->void:
@@ -107,7 +110,7 @@ func _melee_attack()->void:
 
 
 func _ranged_attack()->void:
-	_launcher.play("Fire")
+	_launcher.play("Attack")
 	_can_attack_ranged = false
 	var Ammo := preload("res://Robot/Ammo/Ammo.tscn")
 	for i in _ranged.get_strength(WeaponPaths.DAMAGE):
@@ -138,10 +141,13 @@ func hit(damage_dealt:int)->void:
 	_health -= damage_dealt
 	if _health <= 0:
 		_health = 0
-		emit_signal("destroyed")
-		queue_free()
-	print("ouch ", _health)
 
 
 func get_global_position()->Vector2:
 	return global_position + _body.position
+
+
+func _on_animation_finished()->void:
+	if _health <= 0:
+		emit_signal("destroyed")
+		queue_free()

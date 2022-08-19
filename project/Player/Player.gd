@@ -11,6 +11,8 @@ var _scrap := 40
 
 func _ready()->void:
 	_sword.equipped = true
+	_ranged.equipped = true
+	_launcher.show()
 
 
 func get_global_position()->Vector2:
@@ -18,6 +20,8 @@ func get_global_position()->Vector2:
 
 
 func _physics_process(_delta:float)->void:
+	if _health <= 0:
+		return
 	# get left/right movement
 	var horizontal := Input.get_axis("left", "right") * _horizontal_speed
 	# warning-ignore:narrowing_conversion
