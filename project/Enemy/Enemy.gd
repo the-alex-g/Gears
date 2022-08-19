@@ -152,3 +152,10 @@ func _on_AttackArea_body_entered(body:PhysicsBody2D)->void:
 
 func _on_AttackArea_body_exited(_body:PhysicsBody2D)->void:
 	_is_target_in_range = false
+
+
+func _on_Enemy_destroyed()->void:
+	for x in _upgrades + (randi() % 4) - 1:
+		var scrap = preload("res://Enemy/Scrap/Scrap.tscn").instance() as KinematicBody2D
+		scrap.position = get_global_position()
+		get_parent().add_child(scrap)

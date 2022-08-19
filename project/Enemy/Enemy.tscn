@@ -50,7 +50,6 @@ animation = "Run"
 unique_name_in_owner = true
 visible = false
 frames = ExtResource( 3 )
-animation = "Fire"
 frame = 4
 playing = true
 
@@ -94,6 +93,7 @@ shape = SubResource( 3 )
 
 [node name="DroneDeployTimer" type="Timer" parent="."]
 
+[connection signal="destroyed" from="." to="." method="_on_Enemy_destroyed"]
 [connection signal="body_entered" from="Body/AttackArea" to="." method="_on_AttackArea_body_entered"]
 [connection signal="body_exited" from="Body/AttackArea" to="." method="_on_AttackArea_body_exited"]
 [connection signal="body_entered" from="PlayerDetectionArea" to="." method="_on_PlayerDetectionArea_body_entered"]

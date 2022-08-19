@@ -11,7 +11,7 @@ var good : bool setget _set_good
 var drone_owner : KinematicBody2D
 var damage : int
 var health : int
-var speed := 150
+var speed := 100
 var direction := 1
 var _is_target_in_range := false
 var _is_target_reachable := false

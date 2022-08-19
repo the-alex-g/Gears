@@ -140,7 +140,7 @@ func _start_melee_cooldown()->void:
 
 func hit(damage_dealt:int)->void:
 	if _shield.equipped:
-# warning-ignore:integer_division
+		# warning-ignore:integer_division
 		damage_dealt = max(damage_dealt / _shield.get_strength(), 1)
 	_health -= damage_dealt
 	if _health <= 0:

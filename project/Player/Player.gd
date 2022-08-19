@@ -60,7 +60,8 @@ func _on_Main_ready()->void:
 	emit_signal("update_hud", "scrap", _scrap, false)
 
 
-func _on_Main_upgrade_system(system_name:String, path:int)->void:
+func _on_Main_upgrade_system(system_name:String, path:int, cost:int)->void:
+	_scrap -= cost
 	match system_name:
 		"armor":
 			_health += 1
@@ -85,3 +86,9 @@ func _on_Main_upgrade_system(system_name:String, path:int)->void:
 				_shield.equipped = true
 		"sword":
 			_sword.upgrade(path)
+
+
+func pickup(item_type:String)->void:
+	if item_type == "scrap":
+		_scrap += 1
+		emit_signal("update_hud", "scrap", _scrap, false)

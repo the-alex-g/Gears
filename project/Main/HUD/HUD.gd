@@ -1,7 +1,7 @@
 extends CanvasLayer
 
 signal update_scrap(new_value)
-signal upgrade_system(system_name, path)
+signal upgrade_system(system_name, path, cost)
 
 onready var _health_bar = $"%Health" as ProgressBar
 onready var _scrap_label = $"%Scrap" as Label
@@ -22,7 +22,7 @@ func _on_Main_player_update_hud(parameter_name:String, new_value, new_max:bool)-
 
 func _on_UpgradeContainer_upgrade_system(system_name:String, scrap_reduction:int, path:int)->void:
 	_set_scrap(_scrap - scrap_reduction)
-	emit_signal("upgrade_system", system_name, path)
+	emit_signal("upgrade_system", system_name, path, scrap_reduction)
 
 
 func _set_scrap(value)->void:
